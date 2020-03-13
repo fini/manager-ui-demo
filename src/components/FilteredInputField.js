@@ -4,6 +4,7 @@ import axios from "axios"
 export const FilteredInputField = (props) => {
 
     const [isLoaded, setIsLoaded] = useState(false)
+    const [isMouseOver, setIsMouseOver] = useState(false)
     const [statusMessage, setStatusMessage] = useState("Loading, stand by...")
     const [employees, setEmployees] = useState([])
     const [selectedEmployee, setSelectedEmployee] = useState()
@@ -11,6 +12,20 @@ export const FilteredInputField = (props) => {
     const [searchQuery, setSearchQuery] = useState("")
     const [resultsHidden, setResultsHidden] = useState(true)
     const [dataUrl, setDataUrl] = useState(props.dataUrl)
+
+    function handleClick() {
+          if (!isMouseOver) {
+            setResultsHidden(true)
+          }
+    }
+
+    useEffect(() => {
+        document.addEventListener("mousedown", handleClick);
+        return () => {
+          // Unbind on clean up
+          document.removeEventListener("mousedown", handleClick);
+        };
+    });
 
     useEffect(() => {
         axios
@@ -54,6 +69,12 @@ export const FilteredInputField = (props) => {
                     item.attributes.email = linkedAccount ? linkedAccount.attributes.email : 'n/a'
                 })
 
+                // Alpha sort by Full Name.                
+                employeesData = [...employeesData].sort((a, b) => {
+                    return (a.attributes.name > b.attributes.name) ? 1 : -1
+                })
+
+                // Initialize and get ready
                 setEmployees(employeesData);
                 setFilteredItems(employeesData)
                 setIsLoaded(true)
@@ -132,7 +153,7 @@ export const FilteredInputField = (props) => {
     };    
 
     return (
-        <div className="input-group filtered-input">
+        <div className="input-group filtered-input" onMouseEnter={() => setIsMouseOver(true)} onMouseLeave={() => setIsMouseOver(false)}>
 
             <label htmlFor={props.name}>{props.title}</label>
 
@@ -144,7 +165,6 @@ export const FilteredInputField = (props) => {
                     placeholder={(isLoaded) ? props.placeholder : statusMessage}
                     onChange={changeHandler}
                     onFocus={() => { setResultsHidden(false) }}
-                    //onBlur={() => { setResultsHidden(true) }}
                 />
 
                 <button title="Open Selector" className="btn-open" onClick={handleOpen} style={openBtnStyle}><span role="img" aria-label="Find">🔎</span></button>
