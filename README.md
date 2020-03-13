@@ -14,6 +14,8 @@
 - Consider using useReducer instead of useState hooks.
 - Clean and rewrite CSS, into Sass or CSS Component.
 - Add Unit Tests
+- Add keyboard navigation
+- Optimize for handheld devices.
 
 ## Available Scripts
 
