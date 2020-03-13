@@ -10,6 +10,11 @@
         />
 ```
 
+### Todo
+- Consider using useReducer instead of useState hooks.
+- Clean and rewrite CSS, into Sass or CSS Component.
+- Add Unit Tests
+
 ## Available Scripts
 
 In the project directory, you can run:
